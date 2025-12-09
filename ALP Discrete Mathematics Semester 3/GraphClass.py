@@ -296,3 +296,123 @@ class GraphClass:
             import traceback
             traceback.print_exc()
             return False
+
+    def shortest_path_visualisation(self, source, target, filename="shortest_path.html"):
+        # ✅ Validasi graph
+        if not self.validate_graph():
+            return False
+        
+        G = self.graph
+        
+        # ✅ Validasi source & target nodes (support berbagai tipe)
+        if source not in G.nodes():
+            print(f"❌ Error: Node source '{source}' tidak ada dalam graph")
+            return False
+        
+        if target not in G.nodes():
+            print(f"❌ Error: Node target '{target}' tidak ada dalam graph")
+            return False
+        
+        if source == target:
+            print(f"❌ Error: Source dan target tidak boleh sama")
+            return False
+        
+        # ✅ Validasi filename
+        if not filename or not isinstance(filename, str):
+            print("❌ Error: Filename tidak valid")
+            return False
+        
+        if not filename.endswith('.html'):
+            filename += '.html'
+        
+        try:
+            # ✅ Cari shortest path
+            path = None
+            distance = None
+            
+            try:
+                path = nx.shortest_path(G, source, target, weight='weight')
+                distance = nx.shortest_path_length(G, source, target, weight='weight')
+            except nx.NetworkXNoPath:
+                print(f"❌ Error: Tidak ada jalur dari '{source}' ke '{target}'")
+                return False
+            except Exception as e:
+                try:
+                    print(f"⚠ Warning: Menggunakan shortest path tanpa weight")
+                    path = nx.shortest_path(G, source, target)
+                    distance = len(path) - 1
+                except nx.NetworkXNoPath:
+                    print(f"❌ Error: Tidak ada jalur dari '{source}' ke '{target}'")
+                    return False
+                except Exception as e2:
+                    print(f"❌ Error saat mencari path: {str(e2)}")
+                    return False
+            
+            if not path or len(path) < 2:
+                print(f"❌ Error: Path tidak valid")
+                return False
+            
+            # ✅ Buat network visualization
+            try:
+                net = Network(height="600px", width="100%", directed=G.is_directed())
+                net.from_nx(G)
+            except Exception as e:
+                print(f"❌ Error saat membuat visualisasi: {str(e)}")
+                return False
+            
+            # ✅ Highlight nodes di path
+            try:
+                for n in net.nodes:
+                    if n["id"] in path:
+                        n['color'] = "yellow"
+                        n['size'] = 35
+                        n['font'] = {'size': 100, 'color': 'black'}
+                        n['label'] = str(n['id'])
+            except Exception as e:
+                print(f"⚠ Warning: Error saat highlight nodes: {str(e)}")
+            
+            # ✅ Highlight edges di path
+            try:
+                highlight_edges = set()
+                for i in range(len(path)-1):
+                    highlight_edges.add((path[i], path[i+1]))
+                    if not G.is_directed():
+                        highlight_edges.add((path[i+1], path[i]))
+                
+                for e in net.edges:
+                    if (e['from'], e['to']) in highlight_edges:
+                        e['color'] = "red"
+                        e['width'] = 5
+            except Exception as e:
+                print(f"⚠ Warning: Error saat highlight edges: {str(e)}")
+            
+            # ✅ Set physics
+            try:
+                net.barnes_hut()
+            except Exception as e:
+                print(f"⚠ Warning: Error saat set physics: {str(e)}")
+            
+            # ✅ Save file
+            try:
+                net.show(filename, notebook=False)
+                
+                if os.path.exists(filename):
+                    file_size = os.path.getsize(filename)
+                    print(f"\n✓ Shortest Path berhasil divisualisasikan!")
+                    print(f"  • Jalur: {' → '.join(str(n) for n in path)}")
+                    print(f"  • Jarak: {distance}")
+                    print(f"  • File: {filename} ({file_size} bytes)")
+                    return True
+                else:
+                    print(f"❌ Error: File {filename} tidak berhasil dibuat")
+                    return False
+                    
+            except Exception as e:
+                print(f"❌ Error saat menyimpan file: {str(e)}")
+                return False
+            
+        except Exception as e:
+            print(f"❌ Error tidak terduga: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return False
