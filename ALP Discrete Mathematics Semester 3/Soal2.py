@@ -148,6 +148,11 @@ def soal2_solution():
         print(f"    Jalur terpendek dari A ke G:")
         print(f"      {' → '.join(path)}")
         print(f"    Jarak total: {distance}")
+        
+        # ✅ Visualisasi shortest path
+        filename_path = "soal2_shortest_path_A_to_G.html"
+        graph.shortest_path_visualisation('A', 'G', filename_path)
+        print(f"\n    Visualisasi jalur terpendek disimpan ke: {filename_path}")
     
     print("\n" + "="*70)
 
