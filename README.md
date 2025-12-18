@@ -183,9 +183,22 @@ python main.py
 
 ---
 
-## 📊 Contoh Output
+## 📊 Contoh Output & Penjelasan Soal
 
-### Terminal Output
+### SOAL 1 - GRAF TAK BERARAH
+
+#### 📋 Deskripsi Soal
+Diberikan graf tak berarah `G = (V, E)` dengan:
+- **V (Vertices)**: {A, B, C, D, E, F} - 6 simpul
+- **E (Edges)**: {(A,B), (A,C), (B,D), (C,E), (D,E), (E,F), (C,F)} - 7 sisi
+
+#### 🎯 Pertanyaan yang Dijawab
+a. **Gambarkan Grafnya** - Visualisasi struktur graf  
+b. **Derajat Setiap Simpul** - Berapa banyak sisi yang terhubung ke setiap node  
+c. **Deteksi Cycle** - Menemukan sirkuit/loop dalam graf  
+d. **Konektivitas** - Apakah semua simpul saling terhubung  
+
+#### ✅ Contoh Output
 ```
 ======================================================================
                      SOAL 1 - GRAF TAK BERARAH
@@ -195,22 +208,156 @@ python main.py
   V = {A, B, C, D, E, F}
   E = {(A,B), (A,C), (B,D), (C,E), (D,E), (E,F), (C,F)}
 
-✓ Derajat Setiap Simpul:
-  • Node A: degree = 2
-  • Node B: degree = 2
-  • Node C: degree = 3
-  • Node D: degree = 2
-  • Node E: degree = 3
-  • Node F: degree = 2
+a. Gambarkan Grafnya
+  Graf tak berarah telah divisualisasikan dan disimpan ke file: soal1_graf_visualisasi.html
 
-✓ Cycle Detection:
+b. Derajat Setiap Simpul:
+  Simpul          Derajat
+  -------         -------
+  A               2
+  B               2
+  C               3
+  D               2
+  E               3
+  F               2
+
+c. Deteksi Cycle:
   Cycle ditemukan: ['A', 'B', 'D', 'E', 'C', 'A']
+  Penjelasan: Terdapat sirkuit yang menghubungkan simpul A → B → D → E → C → A
+
+d. Konektivitas Graf:
+  ✓ Graf adalah CONNECTED (semua simpul saling terhubung)
 ```
 
+#### 📌 Konsep yang Dipelajari
+- **Derajat Simpul (Node Degree)**: Jumlah edge yang incident dengan simpul
+- **Cycle Detection**: Menemukan path yang kembali ke simpul awal
+- **Connected Graph**: Semua vertex dapat dicapai dari vertex lainnya
+- **Undirected Graph**: Edge tidak memiliki arah (A-B sama dengan B-A)
+
+![hasil nomor 1](/asset/nomor_1.png)
+
+---
+
+### SOAL 2 - GRAF BERBOBOT
+
+#### 📋 Deskripsi Soal
+Diberikan graf berarah berbobot `G = (V, E)` dengan:
+- **V (Vertices)**: {A, B, C, D, E, F, G} - 7 simpul
+- **E (Edges)**: {(A,B,2), (A,C,5), (B,D,4), (B,E,6), (C,F,3), (D,G,2), (E,F,4), (F,G,1)}
+
+#### 🎯 Pertanyaan yang Dijawab
+a. **Gambarkan Grafnya** - Visualisasi struktur graf berbobot  
+b. **BFS dari Simpul A** - Traversal menggunakan Breadth-First Search  
+c. **DFS dari Simpul A** - Traversal menggunakan Depth-First Search (Rekursif)  
+d. **Dijkstra Algorithm** - Mencari jalur terpendek dari A ke semua simpul dan khususnya ke G  
+
+#### ✅ Contoh Output
+```
+======================================================================
+                     SOAL 2 - GRAF BERBOBOT
+======================================================================
+
+📋 Data Graf:
+  V = {A, B, C, D, E, F, G}
+  E = {(A,B,2), (A,C,5), (B,D,4), (B,E,6), (C,F,3), (D,G,2), (E,F,4), (F,G,1)}
+
+a. Gambarkan Grafnya
+  Graf berbobot telah divisualisasikan dan disimpan ke file: soal2_graf_visualisasi.html
+
+b. Tentukan Urutan Kunjungan Menggunakan BFS Dimulai dari Simpul A
+  Urutan kunjungan BFS dari A:
+    A → B → C → D → E → F → G
+  
+  Penjelasan:
+    Level 0: A (start)
+    Level 1: B (jarak 2 dari A), C (jarak 5 dari A)
+    Level 2: D (jarak 4 dari B), E (jarak 6 dari B), F (jarak 3 dari C)
+    Level 3: G (jarak 2 dari D)
+
+c. Tentukan Urutan Kunjungan Menggunakan DFS (Rekursif)
+   dengan Simpul Awal A dan Urutan Tetangga Berdasarkan Alfabet
+  Urutan kunjungan DFS dari A:
+    A → B → D → G → E → F → C
+  
+  Penjelasan:
+    A → B (neighbor A, urutan alfabet)
+    B → D (neighbor B, urutan alfabet)
+    D → G (neighbor D)
+    G (no more unvisited neighbors)
+    Backtrack ke D, lalu ke B
+    B → E (neighbor berikutnya dari B)
+    E → F (neighbor E)
+    F → (sudah visited, backtrack)
+    Backtrack ke B, lalu ke A
+    A → C (neighbor berikutnya dari A)
+    C (sudah visited F, backtrack)
+
+d. Gunakan Algoritma Dijkstra dari Simpul A untuk Menentukan:
+
+  1. Jarak Minimum dari A ke Seluruh Simpul
+  ------
+  Simpul          Jarak dari A
+  -------         -------
+  A               0
+  B               2
+  C               5
+  D               6
+  E               8
+  F               7
+  G               8
+  
+  Penjelasan:
+    A → A: 0 (start)
+    A → B: 2 (direct)
+    A → C: 5 (direct)
+    A → D: 6 (via B: 2+4)
+    A → E: 8 (via B: 2+6)
+    A → F: 7 (via C: 5+3 atau via E: 8+4? min=7)
+    A → G: 8 (via D: 6+2)
+
+  2. Jalur Terpendek dari A ke G
+  ------
+  Jalur terpendek dari A ke G:
+    A → B → D → G
+  Jarak total: 8
+  
+  Penjelasan:
+    Langkah 1: A → B (bobot 2)
+    Langkah 2: B → D (bobot 4)
+    Langkah 3: D → G (bobot 2)
+    Total: 2 + 4 + 2 = 8
+  
+  Visualisasi jalur terpendek disimpan ke: soal2_shortest_path_A_to_G.html
+```
+![hasil nomor 2](/asset/nomor_2.png)
+
+#### 📌 Konsep yang Dipelajari
+- **Weighted Graph**: Setiap edge memiliki nilai/bobot (cost, distance, weight)
+- **BFS (Breadth-First Search)**: Traversal level-by-level, cocok untuk shortest path tanpa bobot
+- **DFS (Depth-First Search)**: Traversal depth-first, menggunakan rekursi atau stack
+- **Dijkstra's Algorithm**: Algoritma greedy untuk mencari shortest path di weighted graph
+- **Shortest Path**: Path dengan total bobot minimum antara dua vertex
+
+---
+
 ### HTML Visualization
-- Interaktif graph dengan nodes dan edges
-- Warna dan layout untuk kemudahan visualisasi
-- Informasi tooltip saat hover pada nodes/edges
+- **Soal 1**: File `soal1_graf_visualisasi.html`
+  - Nodes ditampilkan dengan label (A, B, C, D, E, F)
+  - Edges ditampilkan dengan garis
+  - Layout otomatis dengan physics simulation
+  - Interactive: zoom, drag nodes, hover untuk info
+
+- **Soal 2**: File `soal2_graf_visualisasi.html`
+  - Nodes ditampilkan dengan label (A, B, C, D, E, F, G)
+  - Edges ditampilkan dengan label bobot
+  - Layout otomatis dengan physics simulation
+  - Interactive: zoom, drag nodes, hover untuk info bobot
+  
+- **Soal 2 Shortest Path**: File `soal2_shortest_path_A_to_G.html`
+  - Visualisasi jalur terpendek dari A ke G
+  - Highlight path dengan warna berbeda
+  - Menampilkan bobot setiap edge dalam path
 
 ---
 
