@@ -330,7 +330,7 @@ d. Gunakan Algoritma Dijkstra dari Simpul A untuk Menentukan:
   
   Visualisasi jalur terpendek disimpan ke: soal2_shortest_path_A_to_G.html
 ```
-![hasil nomor 2](/asset/nomor_2.png)
+![hasil nomor 2](ALP Discrete Mathematics Semester 3/asset/nomor_2.png)
 
 #### 📌 Konsep yang Dipelajari
 - **Weighted Graph**: Setiap edge memiliki nilai/bobot (cost, distance, weight)
